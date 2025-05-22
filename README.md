@@ -2,15 +2,49 @@
 
 This repository contains realization of algorithms from paper [1]. Project was created as the part of python course in IITP RAS. I follow python tooling guide [2].
 
+## Installation and usage
+
+I use pyenv+poetry btw. To get the module follow this commands:
+```shell
+
+    git clone https://github.com/olyatech/Interpolation.git
+
+    cd Interpolation
+
+    curl -sSL https://install.python-poetry.org | python3 - && poetry --version
+
+    poetry config virtualenvs.in-project true
+
+    cd Interpolation
+
+    poetry install
+
+```
+
+## Functionality
+
+Module in named `interpolation` and is stored in `/interpolation` folder. It provides a class `RegularGrid`and classes that implement interpolation algorithms. 
+
 A description of the currently implemented algorithms is contained in the section "Implemented algorithms".
+
+Also you can run script that resizes images. Use `poetry run resize`. Usage:
+```
+Usage: resize [OPTIONS] INPUT_PATH OUTPUT_PATH
+
+  Change image size using interpolation
+
+Options:
+  --width INTEGER         Target width in pixels
+  --height INTEGER        Target height in pixels
+  --algorithm [bilinear]  [default: bilinear]
+  --help                  Show this message and exit.
+```
+
 
 ## Implemented algorithms
 
-### Node-wise interpolation
+- Bilinear interpolation. Obvious [link](https://en.wikipedia.org/wiki/Bilinear_interpolation) to find more information about algorithm
 
-A field on the new mesh $\psi_i^{new}(p_i)$ is calculated as:
-$$\psi_i^{new}(p_i) = \sum_{j}N_j^{old}(p_i)\psi_i^{old},$$ 
-where $N_j^{old}$ are basis functions (finite element or control-volume depending on the nature of the field $\psi_i^{old}$) defined on the old mesh [1].
 
 ## References:
 
