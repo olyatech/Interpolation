@@ -10,7 +10,10 @@ from interpolation.interpolation import resize_image
 
 @click.group()
 def cli() -> None:
-    """Interpolation instrument for images."""
+    """Command-line interface group for image interpolation operations.
+
+    This CLI provides commands for performing various image interpolation operations.
+    """
     pass
 
 
@@ -26,7 +29,23 @@ def cli() -> None:
     show_default=True,
 )
 def resize(input_path: str, output_path: str, width: int, height: int, algorithm: str) -> None:
-    """Change image size using interpolation."""
+    """Resizes an image to specified dimensions using interpolation.
+
+    Args:
+        input_path: Path to the input image file.
+        output_path: Path where the resized image will be saved.
+        width: Target width in pixels (must be positive).
+        height: Target height in pixels (must be positive).
+        algorithm: Interpolation algorithm to use (currently only 'bilinear' supported).
+
+    Raises:
+        click.BadParameter: If width or height are not positive integers.
+        IOError: If there are issues reading the input file or writing the output file.
+
+    Example:
+        $ interpolation resize input.jpg output.jpg --width 800 --height 600
+
+    """
     if width <= 0 or height <= 0:
         raise click.BadParameter("Width and height must be positive integers")
 
@@ -37,5 +56,13 @@ def resize(input_path: str, output_path: str, width: int, height: int, algorithm
 
 
 def main() -> None:
-    """Entry point for the CLI application."""
+    """Entry point for the command-line interface.
+
+    This function serves as the main entry point when the package is run as a script.
+    It initializes and runs the Click CLI interface.
+
+    Example:
+        $ interpolation --help
+
+    """
     cli(prog_name="interpolation")

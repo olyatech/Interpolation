@@ -30,7 +30,7 @@ def test_cli_group(runner: CliRunner) -> None:
     """Test that CLI group shows help."""
     result: Result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
-    assert "Interpolation instrument for images" in result.output
+    assert "Command-line interface group for image interpolation operations." in result.output
     assert "resize" in result.output
 
 
