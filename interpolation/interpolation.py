@@ -1,5 +1,11 @@
 import numpy as np
-from typing import List, Tuple, Dict
+import click
+
+from typing import Tuple
+from PIL import Image
+from itertools import product
+
+import matplotlib.pyplot as plt
 
 class BilinearInterpolator:
     """
@@ -22,57 +28,59 @@ class BilinearInterpolator:
         """
         values = np.zeros(shape=target_grid.shape)
         
-        for i, (x, y) in enumerate(self.target_grid.nodes):
-            # Find bounding cell for point on src grid
-            left, down, right, up = self._find_bounding_cell(x, y)
-            
-            # Get values at bounding cell vertexes
-            q11 = self.src_grid.get_value(left, down)
-            q12 = self.src_grid.get_value(left, up)
-            q21 = self.src_grid.get_value(right, down)
-            q22 = self.src_grid.get_value(right, up)
-            
-            # Bilinear interpolation
-            if right == left and up == down: # point matches with src grid point
-                values[i] = self.src_grid.get_value(x, y)
+        for (iy, y) in enumerate(target_grid.points[0]):
+            for (ix, x) in enumerate(target_grid.points[1]):
+                # Find bounding cell for point on src grid
+                left, down, right, up = self._find_bounding_cell(y, x)
 
-            elif right == left: # point lies on the grid line
-                values[i] = (q11 * (up - y) + q12 * (y - down)) / (up - down)
-            
-            elif up == down: # point lies on the grid line
-                values[i] = (q11 * (right - x) + q21 * (x - left)) / (right - left)
+                # Get values at bounding cell vertexes
+                q11 = self.src_grid.get_value(down, left)
+                q12 = self.src_grid.get_value(up, left)
+                q21 = self.src_grid.get_value(down, right)
+                q22 = self.src_grid.get_value(up, right)
 
-            else: # point is strictly inside of the bounding cell
-                values[i] = (q11 * (right - x) * (up - y) +
-                             q21 * (x - left) * (up - y) +
-                             q12 * (right - x) * (y - down) +
-                             q22 * (x - left) * (y - down)) / ((right - left) * (up - down))
+                # Bilinear interpolation
+                if right == left and up == down: # point matches with src grid point
+                    values[iy, ix] = self.src_grid.get_value(y, x)
+
+                elif right == left: # point lies on the grid line
+                    values[iy, ix] = (q11 * (up - y) + q12 * (y - down)) / (up - down)
+
+                elif up == down: # point lies on the grid line
+                    values[iy, ix] = (q11 * (right - x) + q21 * (x - left)) / (right - left)
+
+                else: # point is strictly inside of the bounding cell
+                    values[iy, ix] = (q11 * (right - x) * (up - y) +
+                                      q21 * (x - left) * (up - y) +
+                                      q12 * (right - x) * (y - down) +
+                                      q22 * (x - left) * (y - down)) / ((right - left) * (up - down))
 
         return values
     
-    def find_bounding_cell(self, x: float, y: float) -> Tuple[float, float, float, float]:
+    def _find_bounding_cell(self, y: float, x: float) -> Tuple[float, float, float, float]:
         """
         Finds bounding cell for point (y,x)
         :return: (x0, y0, x1, y1) - coords of rectangle vertexes
         :raises ValueError: point out of grid bounds
         """
-        if not ((self._x_coords[0] <= x <= self._x_coords[-1] and 
-                 self._y_coords[0] <= y <= self._y_coords[-1])):
-            raise ValueError("Point is out of grid bounds")
+        if not ((self.src_grid.points[1][0] <= x <= self.src_grid.points[1][-1] and 
+                 self.src_grid.points[0][0] <= y <= self.src_grid.points[0][-1])):
+            raise ValueError(f"Point is out of grid bounds, required:"
+                             f"\n{self.src_grid.points[1][0]} <= {x} <= {self.src_grid.points[1][-1]}"
+                             f"\n{self.src_grid.points[0][0]} <= {y} <= {self.src_grid.points[0][-1]}")
         
-        left_bound = np.searchsorted(self.src_grid.points[0], x) - 1
-        down_bound = np.searchsorted(self.src_grid.points[1], y) - 1
+        left_bound = np.searchsorted(self.src_grid.points[1], x) - 1
+        down_bound = np.searchsorted(self.src_grid.points[0], y) - 1
         
         return (
-            self._x_coords[left_bound], self._y_coords[down_bound],
-            self._x_coords[left_bound + 1], self._y_coords[down_bound + 1]
+            self.src_grid.points[1][left_bound], self.src_grid.points[0][down_bound],
+            self.src_grid.points[1][left_bound + 1], self.src_grid.points[0][down_bound + 1]
         )
 
 
 class RectangularGrid:
     """
-    Прямоугольная сетка для билинейной интерполяции
-    Поддерживает регулярные сетки
+    Rectangular regular grid.
     """
     
     def __init__(self, points: Tuple[np.array], values: np.ndarray = None):
@@ -89,8 +97,26 @@ class RectangularGrid:
             # Check shape match
             if values.shape != self.shape:
                 raise ValueError(f"Values and grid shape mismatch ({values.shape} != {self.shape})")
+            
+    @classmethod
+    def from_image(cls, image: Image.Image):
+        """Create grid from image"""
+        img_array = np.array(image)
+        height, width = img_array.shape[:2]
+        
+        x_coords = np.arange(width)
+        y_coords = np.arange(height)
+        
+        return cls((y_coords, x_coords), img_array)
     
-    def get_value(self, x: float, y: float) -> float:
+    def to_image(self) -> Image.Image:
+        """Convert grid to Image"""
+        if self.values is None:
+            raise ValueError("Grid has no values to convert to image")
+        
+        return Image.fromarray(self.values.astype('uint8'))
+    
+    def get_value(self, y: float, x: float) -> float:
         """
         Returns value in (y, x) point from grid
         :param y: y coord
@@ -101,9 +127,32 @@ class RectangularGrid:
         ix = np.searchsorted(self.points[1], x)
         
         # Check if the point is on grid and return value
-        if ix < len(self._x_coords) and iy < len(self._y_coords):
-            if self.points[1, ix] == x and self.points[0, iy] == y:
+        if ix < len(self.points[1]) and iy < len(self.points[0]):
+            if self.points[1][ix] == x and self.points[0][iy] == y:
                 return self.values[iy, ix]
-            
+        
         raise ValueError(f"Point ({y}, {x}) not found in grid nodes")
 
+def resize_image(image: Image.Image, y_size = int, x_size = int, algorithm: str = 'bilinear') -> Image.Image:
+    """Resize image to given shape"""
+    src_width, src_height = image.size
+
+    # Create a grid from image
+    src_grid = RectangularGrid.from_image(image)
+        
+    # Grid for resized image
+    y_grid = np.arange(0, src_height - 1, src_height / y_size)
+    x_grid = np.arange(0, src_width - 1, src_width / x_size)
+        
+    if algorithm == 'bilinear':
+    # Interpolate values for new grid
+        interpolator = BilinearInterpolator(src_grid)
+        res_grid = RectangularGrid(points=(y_grid, x_grid))
+        res_grid.values = interpolator.interpolate(res_grid)
+    else:
+        raise NotImplementedError("unknown interpolation algorithm")
+        
+    # Convert to image
+    resized_img = res_grid.to_image()
+
+    return resized_img
