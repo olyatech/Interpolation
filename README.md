@@ -39,7 +39,9 @@ Options:
   --algorithm [bilinear]  [default: bilinear]
   --help                  Show this message and exit.
 ```
-
+Here is an example of image resizing from size $300 \times 300$ to $600 \times 600$:
+![before resize](images/python-logo.png)
+![after resize](images/python-logo-resized.png)
 
 ## Implemented algorithms
 
