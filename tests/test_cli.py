@@ -47,7 +47,14 @@ def test_resize_command_success(runner: CliRunner, mock_image: MagicMock, tmp_pa
         img.save(input_path)
 
         result: Result = runner.invoke(
-            cli, ["resize", str(input_path), str(output_path), "--width=100", "--height=100"]
+            cli,
+            [
+                "resize",
+                str(input_path),
+                str(output_path),
+                "--width=100",
+                "--height=100",
+            ],
         )
 
         mock_resize.assert_called_once_with(ANY, y_size=100, x_size=100, algorithm="bilinear")
@@ -121,7 +128,13 @@ def test_resize_command_default_algorithm(runner: CliRunner, mock_image: MagicMo
     ):
         result: Result = runner.invoke(
             cli,
-            ["resize", str(input_path), str(output_path), "--height=100", "--width=100"],
+            [
+                "resize",
+                str(input_path),
+                str(output_path),
+                "--height=100",
+                "--width=100",
+            ],
         )
 
         mock_resize.assert_called_once_with(ANY, y_size=100, x_size=100, algorithm="bilinear")
@@ -144,7 +157,13 @@ def test_resize_command_original_dimensions(runner: CliRunner, mock_image: Magic
 
         result: Result = runner.invoke(
             cli,
-            ["resize", str(input_path), str(output_path), "--width=200", "--height=200"],
+            [
+                "resize",
+                str(input_path),
+                str(output_path),
+                "--width=200",
+                "--height=200",
+            ],
         )
 
         mock_resize.assert_called_once_with(ANY, y_size=200, x_size=200, algorithm="bilinear")

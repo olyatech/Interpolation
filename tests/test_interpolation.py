@@ -6,7 +6,11 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from interpolation.interpolation import BilinearInterpolator, RectangularGrid, resize_image
+from interpolation.interpolation import (
+    BilinearInterpolator,
+    RectangularGrid,
+    resize_image,
+)
 
 
 # Tests for RectangularGrid class

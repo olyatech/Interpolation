@@ -122,7 +122,7 @@ class BilinearInterpolator:
 
 
 class RectangularGrid(GridLike):
-    """Rectangular regular grid."""
+    """Implementation of rectangular regular grid."""
 
     def __init__(self, points: Tuple[np.ndarray, np.ndarray], values: Optional[np.ndarray] = None) -> None:
         """Init rectangular grid by grid and values.

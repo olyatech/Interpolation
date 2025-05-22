@@ -19,7 +19,12 @@ def cli() -> None:
 @click.argument("output_path", type=click.Path())
 @click.option("--width", type=int, help="Target width in pixels", required=True)
 @click.option("--height", type=int, help="Target height in pixels", required=True)
-@click.option("--algorithm", type=click.Choice(["bilinear"]), default="bilinear", show_default=True)
+@click.option(
+    "--algorithm",
+    type=click.Choice(["bilinear"]),
+    default="bilinear",
+    show_default=True,
+)
 def resize(input_path: str, output_path: str, width: int, height: int, algorithm: str) -> None:
     """Change image size using interpolation."""
     if width <= 0 or height <= 0:
