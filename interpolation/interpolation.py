@@ -103,6 +103,9 @@ class RectangularGrid(GridLike):
         self.points = points
         self.shape = (len(points[0]), len(points[1]))
 
+        if self.shape[0] == 0 or self.shape[1] == 0:
+            raise ValueError(f"Empty grid with shape ({self.shape[0]}, {self.shape[1]})")
+
         self.values = values
         if values is not None:
             # Check shape match
@@ -152,11 +155,11 @@ def resize_image(image: Image.Image, y_size: int, x_size: int, algorithm: str = 
     src_grid = RectangularGrid.from_image(image)
 
     # Grid for resized image
-    y_grid = np.arange(0, src_height - 1, src_height / y_size)
-    x_grid = np.arange(0, src_width - 1, src_width / x_size)
+    y_grid = np.arange(0, src_height - 1, (src_height - 1) / y_size)
+    x_grid = np.arange(0, src_width - 1, (src_width - 1) / x_size)
 
-    if algorithm == 'bilinear':
     # Interpolate values for new grid
+    if algorithm == 'bilinear':
         interpolator = BilinearInterpolator(src_grid)
         res_grid = RectangularGrid(points=(y_grid, x_grid))
         res_grid.values = interpolator.interpolate(res_grid)

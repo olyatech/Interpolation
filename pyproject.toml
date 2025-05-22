@@ -27,6 +27,8 @@ resize = "interpolation.cli:resize"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.11.10"
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
 
 [tool.ruff]
 select = ["E", "W", "F", "D", "N", "B", "I", "C90", "ANN"]
@@ -45,3 +47,7 @@ quote-style = "double"
 [tool.ruff.isort]
 known-first-party = ["interpolation"]
 required-imports = ["from __future__ import annotations"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
