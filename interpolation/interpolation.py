@@ -1,11 +1,7 @@
 import numpy as np
-import click
 
 from typing import Tuple
 from PIL import Image
-from itertools import product
-
-import matplotlib.pyplot as plt
 
 class BilinearInterpolator:
     """
