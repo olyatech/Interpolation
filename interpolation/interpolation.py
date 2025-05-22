@@ -68,17 +68,17 @@ class BilinearInterpolator:
         src_grid: The source grid to interpolate from.
 
     Example:
-        import numpy as np
-        from interpolation.interpolation import RectangularGrid, BilinearInterpolator
-
-        src_points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid
-        src_values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
-        src_grid = RectangularGrid(points, values)
-        interpolator = BilinearInterpolator(src_grid)
-
-        dest_points = (np.array([0, 1]), np.array([0, 1]))
-        dest_grid = RectangularGrid(dest_points)
-        dest_grid.values = interpolator.interpolate(dest_grid)
+        >>> import numpy as np
+        >>> from interpolation.interpolation import RectangularGrid, BilinearInterpolator
+        >>> 
+        >>> src_points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid
+        >>> src_values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
+        >>> src_grid = RectangularGrid(points, values)
+        >>> interpolator = BilinearInterpolator(src_grid)
+        >>> 
+        >>> dest_points = (np.array([0, 1]), np.array([0, 1]))
+        >>> dest_grid = RectangularGrid(dest_points)
+        >>> dest_grid.values = interpolator.interpolate(dest_grid)
 
     """
 
@@ -178,12 +178,12 @@ class RectangularGrid(GridLike):
         values: Optional numpy array containing grid values.
 
     Example:
-        import numpy as np
-        from interpolation.interpolation import RectangularGrid
-
-        points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid
-        values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
-        grid = RectangularGrid(points, values)
+        >>> import numpy as np
+        >>> from interpolation.interpolation import RectangularGrid
+        >>> 
+        >>> points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid
+        >>> values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
+        >>> grid = RectangularGrid(points, values)
 
     """
 

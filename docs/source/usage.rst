@@ -1,4 +1,4 @@
-API Reference
+Usage
 =============
 
 .. currentmodule:: interpolation.interpolation

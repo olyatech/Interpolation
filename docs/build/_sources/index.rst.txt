@@ -5,7 +5,7 @@
 
 .. _index:
 
-Welcome to Interpolation Documentation!
+Interpolation Documentation
 ===========================================
 
 This is the documentation for the Interpolation Python library.
@@ -16,5 +16,6 @@ This is the documentation for the Interpolation Python library.
 
    overview
    installation
-   api
+   usage
+   license
 
