@@ -7,14 +7,14 @@ authors = [
     {name = "olyatech", email = "terekhova.oa@phystech.edu"}
 ]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Typing :: Typed",
 ]
-dependencies = ["click (>=8.1.8,<9.0.0)", "pillow (>=11.1.0,<12.0.0)", "numpy (>=2.2.6,<3.0.0)"]
+dependencies = ["click (>=8.1.8,<9.0.0)", "pillow (>=11.1.0,<12.0.0)", "numpy (>=2.2.6,<3.0.0)", "nox (>=2025.5.1,<2026.0.0)", "nox-poetry (>=1.2.0,<2.0.0)", "ruff (>=0.11.10,<0.12.0)", "pytest (>=8.3.5,<9.0.0)", "pytest-cov (>=6.1.1,<7.0.0)", "mypy (>=1.15.0,<2.0.0)"]
 
 [project.urls]
 "Homepage" = "https://github.com/olyatech/Interpolation"
