@@ -85,6 +85,17 @@ def test_get_value_with_empty_values() -> None:
     with pytest.raises(ValueError):
         grid.get_value(0, 0)
 
+def test_find_bounding_cell(sample_grid: RectangularGrid) -> None:
+    """Test finding bounding cell for interpolation.
+
+    Args:
+        sample_grid: Fixture providing a test grid
+
+    """
+    assert sample_grid.find_bounding_cell(0.5, 0.5) == (0, 0, 1, 1)
+    with pytest.raises(ValueError):
+        sample_grid.find_bounding_cell(5, 5)  # Out of bounds
+
 
 # Tests for BilinearInterpolator
 def test_interpolator_init(sample_grid: RectangularGrid) -> None:
@@ -122,20 +133,6 @@ def test_interpolation(sample_grid: RectangularGrid, y: float, x: float, expecte
     target = RectangularGrid((np.array([y]), np.array([x])))
     result = interpolator.interpolate(target)
     assert np.isclose(result[0, 0], expected, rtol=1e-5)
-
-
-def test_find_bounding_cell(sample_grid: RectangularGrid) -> None:
-    """Test finding bounding cell for interpolation.
-
-    Args:
-        sample_grid: Fixture providing a test grid
-
-    """
-    interpolator = BilinearInterpolator(sample_grid)
-    assert interpolator._find_bounding_cell(0.5, 0.5) == (0, 0, 1, 1)
-    with pytest.raises(ValueError):
-        interpolator._find_bounding_cell(5, 5)  # Out of bounds
-
 
 # Tests for resize_image
 def test_resize_image() -> None:

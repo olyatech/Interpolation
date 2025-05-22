@@ -59,6 +59,23 @@ class GridLike(ABC):
 
         """
         raise NotImplementedError("shape should be implemented")
+    
+    @property
+    @abstractmethod
+    def find_bounding_cell(self, y: float, x: float) -> Tuple[float, float, float, float]:
+        """Find the bounding cell for a given point (y, x).
+
+        Args:
+            y: The y-coordinate of the point.
+            x: The x-coordinate of the point.
+
+        Returns:
+            A tuple (x0, y0, x1, y1) representing the coordinates of the bounding rectangle vertices.
+
+        Raises:
+            ValueError: If the point is outside the grid bounds.
+
+        """
 
 
 class BilinearInterpolator:
@@ -106,7 +123,7 @@ class BilinearInterpolator:
         for iy, y in enumerate(target_grid.points[0]):
             for ix, x in enumerate(target_grid.points[1]):
                 # Find bounding cell for point on src grid
-                left, down, right, up = self._find_bounding_cell(y, x)
+                left, down, right, up = self.src_grid.find_bounding_cell(y, x)
 
                 # Get values at bounding cell vertexes
                 q11 = self.src_grid.get_value(down, left)
@@ -133,40 +150,6 @@ class BilinearInterpolator:
                     ) / ((right - left) * (up - down))
 
         return values
-
-    def _find_bounding_cell(self, y: float, x: float) -> Tuple[float, float, float, float]:
-        """Find the bounding cell for a given point (y, x).
-
-        Args:
-            y: The y-coordinate of the point.
-            x: The x-coordinate of the point.
-
-        Returns:
-            A tuple (x0, y0, x1, y1) representing the coordinates of the bounding rectangle vertices.
-
-        Raises:
-            ValueError: If the point is outside the grid bounds.
-
-        """
-        if not (
-            self.src_grid.points[1][0] <= x <= self.src_grid.points[1][-1]
-            and self.src_grid.points[0][0] <= y <= self.src_grid.points[0][-1]
-        ):
-            raise ValueError(
-                f"Point is out of grid bounds, required:"
-                f"\n{self.src_grid.points[1][0]} <= {x} <= {self.src_grid.points[1][-1]}"
-                f"\n{self.src_grid.points[0][0]} <= {y} <= {self.src_grid.points[0][-1]}"
-            )
-
-        left_bound = np.searchsorted(self.src_grid.points[1], x) - 1
-        down_bound = np.searchsorted(self.src_grid.points[0], y) - 1
-
-        return (
-            self.src_grid.points[1][left_bound],
-            self.src_grid.points[0][down_bound],
-            self.src_grid.points[1][left_bound + 1],
-            self.src_grid.points[0][down_bound + 1],
-        )
 
 
 class RectangularGrid(GridLike):
@@ -290,6 +273,40 @@ class RectangularGrid(GridLike):
                 return self.values[iy, ix]
 
         raise ValueError(f"Point ({y}, {x}) not found in grid nodes")
+    
+    def find_bounding_cell(self, y: float, x: float) -> Tuple[float, float, float, float]:
+        """Find the bounding cell for a given point (y, x).
+
+        Args:
+            y: The y-coordinate of the point.
+            x: The x-coordinate of the point.
+
+        Returns:
+            A tuple (x0, y0, x1, y1) representing the coordinates of the bounding rectangle vertices.
+
+        Raises:
+            ValueError: If the point is outside the grid bounds.
+
+        """
+        if not (
+            self._points[1][0] <= x <= self._points[1][-1]
+            and self._points[0][0] <= y <= self._points[0][-1]
+        ):
+            raise ValueError(
+                f"Point is out of grid bounds, required:"
+                f"\n{self._points[1][0]} <= {x} <= {self._points[1][-1]}"
+                f"\n{self._points[0][0]} <= {y} <= {self._points[0][-1]}"
+            )
+
+        left_bound = np.searchsorted(self._points[1], x) - 1
+        down_bound = np.searchsorted(self._points[0], y) - 1
+
+        return (
+            self._points[1][left_bound],
+            self._points[0][down_bound],
+            self._points[1][left_bound + 1],
+            self._points[0][down_bound + 1],
+        )
 
 
 def resize_image(image: Image.Image, y_size: int, x_size: int, algorithm: str = "bilinear") -> Image.Image:
