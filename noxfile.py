@@ -3,14 +3,15 @@
 from __future__ import annotations
 
 import nox
-from nox.sessions import Session
+import nox_poetry
+from nox_poetry.sessions import Session
 
 TEST_DIR = "tests"
 COVERAGE_FILE = ".coverage"
 
 PACKAGE = "interpolation"
 
-nox.options.sessions = ["format", "lint", "tests", "typechecks"]
+nox.options.sessions = ["format", "lint", "tests", "typechecks", "docs"]
 
 LOCATIONS = [
     PACKAGE,
@@ -27,21 +28,21 @@ def install_with_poetry(session: Session, *args: str) -> None:
         session.run("poetry", "add", "--no-interaction", *args, external=True)
 
 
-@nox.session(python="3.11")
+@nox_poetry.session(python="3.13")
 def format(session: Session) -> None:
     """Format codestyle Ruff."""
     install_with_poetry(session, "ruff")
     session.run("ruff", "format", *LOCATIONS)
 
 
-@nox.session(python="3.11")
+@nox_poetry.session(python="3.13")
 def lint(session: Session) -> None:
     """Check codestyle Ruff."""
     install_with_poetry(session, "ruff")
     session.run("ruff", "check", "--fix", *LOCATIONS)
 
 
-@nox.session(python="3.11")
+@nox_poetry.session(python="3.13")
 def tests(session: Session) -> None:
     """Run pytest tests."""
     install_with_poetry(session, "pytest", "pytest-cov")
@@ -56,7 +57,7 @@ def tests(session: Session) -> None:
     )
 
 
-@nox.session(python="3.11")
+@nox_poetry.session(python="3.13")
 def coverage_report(session: Session) -> None:
     """Create tests report."""
     install_with_poetry(session, "coverage[toml]")
@@ -64,8 +65,15 @@ def coverage_report(session: Session) -> None:
     session.run("coverage", "html", "-d", "htmlcov")
 
 
-@nox.session(python="3.11")
+@nox_poetry.session(python="3.13")
 def typechecks(session: Session) -> None:
     """Typecheck using mypy."""
     install_with_poetry(session, "mypy")
     session.run("mypy", "--explicit-package-bases", PACKAGE)
+
+
+@nox_poetry.session(python="3.13")
+def docs(session: Session) -> None:
+    """Build the documentation."""
+    session.chdir("docs/")
+    session.run("sphinx-build", "-b", "html", "./source", "./build")
