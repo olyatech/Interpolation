@@ -59,8 +59,7 @@ class GridLike(ABC):
 
         """
         raise NotImplementedError("shape should be implemented")
-    
-    @property
+
     @abstractmethod
     def find_bounding_cell(self, y: float, x: float) -> Tuple[float, float, float, float]:
         """Find the bounding cell for a given point (y, x).
@@ -87,12 +86,12 @@ class BilinearInterpolator:
     Example:
         >>> import numpy as np
         >>> from interpolation.interpolation import RectangularGrid, BilinearInterpolator
-        >>> 
+        >>>
         >>> src_points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid
         >>> src_values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
         >>> src_grid = RectangularGrid(points, values)
         >>> interpolator = BilinearInterpolator(src_grid)
-        >>> 
+        >>>
         >>> dest_points = (np.array([0, 1]), np.array([0, 1]))
         >>> dest_grid = RectangularGrid(dest_points)
         >>> dest_grid.values = interpolator.interpolate(dest_grid)
@@ -163,7 +162,7 @@ class RectangularGrid(GridLike):
     Example:
         >>> import numpy as np
         >>> from interpolation.interpolation import RectangularGrid
-        >>> 
+        >>>
         >>> points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid
         >>> values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
         >>> grid = RectangularGrid(points, values)
@@ -273,7 +272,7 @@ class RectangularGrid(GridLike):
                 return self.values[iy, ix]
 
         raise ValueError(f"Point ({y}, {x}) not found in grid nodes")
-    
+
     def find_bounding_cell(self, y: float, x: float) -> Tuple[float, float, float, float]:
         """Find the bounding cell for a given point (y, x).
 
@@ -288,10 +287,7 @@ class RectangularGrid(GridLike):
             ValueError: If the point is outside the grid bounds.
 
         """
-        if not (
-            self._points[1][0] <= x <= self._points[1][-1]
-            and self._points[0][0] <= y <= self._points[0][-1]
-        ):
+        if not (self._points[1][0] <= x <= self._points[1][-1] and self._points[0][0] <= y <= self._points[0][-1]):
             raise ValueError(
                 f"Point is out of grid bounds, required:"
                 f"\n{self._points[1][0]} <= {x} <= {self._points[1][-1]}"

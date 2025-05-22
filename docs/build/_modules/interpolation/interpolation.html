@@ -201,7 +201,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 </ul>
 
 </div>
@@ -249,7 +250,7 @@
 
 
 <div class="viewcode-block" id="GridLike">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.GridLike">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.GridLike">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GridLike</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract base class for grid-like data structures.</span>
 
@@ -257,7 +258,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="GridLike.get_value">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.GridLike.get_value">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.GridLike.get_value">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the value at the given (y, x) coordinates in the grid.</span>
@@ -302,12 +303,31 @@
 <span class="sd">            NotImplementedError: If the method is not implemented by subclass.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;shape should be implemented&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;shape should be implemented&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GridLike.find_bounding_cell">
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.GridLike.find_bounding_cell">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_bounding_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the bounding cell for a given point (y, x).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            y: The y-coordinate of the point.</span>
+<span class="sd">            x: The x-coordinate of the point.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple (x0, y0, x1, y1) representing the coordinates of the bounding rectangle vertices.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the point is outside the grid bounds.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span></div>
+</div>
 
 
 
 <div class="viewcode-block" id="BilinearInterpolator">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.BilinearInterpolator">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.BilinearInterpolator">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BilinearInterpolator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs bilinear interpolation on a regular rectangular grid.</span>
 
@@ -317,12 +337,12 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from interpolation.interpolation import RectangularGrid, BilinearInterpolator</span>
-<span class="sd">        &gt;&gt;&gt; </span>
+<span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; src_points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid</span>
 <span class="sd">        &gt;&gt;&gt; src_values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])</span>
 <span class="sd">        &gt;&gt;&gt; src_grid = RectangularGrid(points, values)</span>
 <span class="sd">        &gt;&gt;&gt; interpolator = BilinearInterpolator(src_grid)</span>
-<span class="sd">        &gt;&gt;&gt; </span>
+<span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; dest_points = (np.array([0, 1]), np.array([0, 1]))</span>
 <span class="sd">        &gt;&gt;&gt; dest_grid = RectangularGrid(dest_points)</span>
 <span class="sd">        &gt;&gt;&gt; dest_grid.values = interpolator.interpolate(dest_grid)</span>
@@ -339,7 +359,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span> <span class="o">=</span> <span class="n">src_grid</span>
 
 <div class="viewcode-block" id="BilinearInterpolator.interpolate">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.BilinearInterpolator.interpolate">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.BilinearInterpolator.interpolate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_grid</span><span class="p">:</span> <span class="n">GridLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform bilinear interpolation to estimate values at target grid points.</span>
 
@@ -355,7 +375,7 @@
         <span class="k">for</span> <span class="n">iy</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">target_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">target_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                 <span class="c1"># Find bounding cell for point on src grid</span>
-                <span class="n">left</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_bounding_cell</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+                <span class="n">left</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">find_bounding_cell</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
                 <span class="c1"># Get values at bounding cell vertexes</span>
                 <span class="n">q11</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">down</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
@@ -382,46 +402,12 @@
                     <span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">up</span> <span class="o">-</span> <span class="n">down</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">values</span></div>
-
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">_find_bounding_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the bounding cell for a given point (y, x).</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            y: The y-coordinate of the point.</span>
-<span class="sd">            x: The x-coordinate of the point.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A tuple (x0, y0, x1, y1) representing the coordinates of the bounding rectangle vertices.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            ValueError: If the point is outside the grid bounds.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Point is out of grid bounds, required:&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">left_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">down_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">left_bound</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">down_bound</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">left_bound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">src_grid</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">down_bound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="p">)</span></div>
+</div>
 
 
 
 <div class="viewcode-block" id="RectangularGrid">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.RectangularGrid">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.RectangularGrid">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RectangularGrid</span><span class="p">(</span><span class="n">GridLike</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a regular rectangular grid.</span>
 
@@ -433,7 +419,7 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; from interpolation.interpolation import RectangularGrid</span>
-<span class="sd">        &gt;&gt;&gt; </span>
+<span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; points = (np.array([0, 1, 2]), np.array([0, 1, 2]))  # 3x3 grid</span>
 <span class="sd">        &gt;&gt;&gt; values = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])</span>
 <span class="sd">        &gt;&gt;&gt; grid = RectangularGrid(points, values)</span>
@@ -484,7 +470,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
 
 <div class="viewcode-block" id="RectangularGrid.from_image">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.RectangularGrid.from_image">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.RectangularGrid.from_image">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_image</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a grid from a PIL Image.</span>
@@ -506,7 +492,7 @@
 
 
 <div class="viewcode-block" id="RectangularGrid.to_image">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.RectangularGrid.to_image">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.RectangularGrid.to_image">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_image</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the grid to a PIL Image.</span>
 
@@ -524,7 +510,7 @@
 
 
 <div class="viewcode-block" id="RectangularGrid.get_value">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.RectangularGrid.get_value">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.RectangularGrid.get_value">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the value at the given (y, x) coordinates in the grid.</span>
 
@@ -551,12 +537,46 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">iy</span><span class="p">,</span> <span class="n">ix</span><span class="p">]</span>
 
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Point (</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">) not found in grid nodes&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RectangularGrid.find_bounding_cell">
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.RectangularGrid.find_bounding_cell">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_bounding_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the bounding cell for a given point (y, x).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            y: The y-coordinate of the point.</span>
+<span class="sd">            x: The x-coordinate of the point.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple (x0, y0, x1, y1) representing the coordinates of the bounding rectangle vertices.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the point is outside the grid bounds.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Point is out of grid bounds, required:&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">left_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">down_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">left_bound</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">down_bound</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">left_bound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">down_bound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">)</span></div>
 </div>
 
 
 
 <div class="viewcode-block" id="resize_image">
-<a class="viewcode-back" href="../../api.html#interpolation.interpolation.resize_image">[docs]</a>
+<a class="viewcode-back" href="../../usage.html#interpolation.interpolation.resize_image">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">y_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">x_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bilinear&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Resizes an image to the specified dimensions using interpolation.</span>
 

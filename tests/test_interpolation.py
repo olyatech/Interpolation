@@ -85,6 +85,7 @@ def test_get_value_with_empty_values() -> None:
     with pytest.raises(ValueError):
         grid.get_value(0, 0)
 
+
 def test_find_bounding_cell(sample_grid: RectangularGrid) -> None:
     """Test finding bounding cell for interpolation.
 
@@ -133,6 +134,7 @@ def test_interpolation(sample_grid: RectangularGrid, y: float, x: float, expecte
     target = RectangularGrid((np.array([y]), np.array([x])))
     result = interpolator.interpolate(target)
     assert np.isclose(result[0, 0], expected, rtol=1e-5)
+
 
 # Tests for resize_image
 def test_resize_image() -> None:
