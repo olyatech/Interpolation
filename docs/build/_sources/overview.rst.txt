@@ -1,0 +1,23 @@
+.. _overview:
+
+Overview
+===========================================
+Module in named `interpolation`. It provides a class `RegularGrid`and classes that implement interpolation algorithms. 
+
+A description of the currently implemented algorithms is contained in the section "Implemented algorithms".
+
+Also you can run script that resizes images. Use `poetry run resize`. Usage:
+.. code-block:: console
+    Usage: resize [OPTIONS] INPUT_PATH OUTPUT_PATH
+
+      Change image size using interpolation
+
+    Options:
+      --width INTEGER         Target width in pixels
+      --height INTEGER        Target height in pixels
+      --algorithm [bilinear]  [default: bilinear]
+      --help                  Show this message and exit.
+
+Here is an example of image resizing from size $300 \times 300$ to $600 \times 600$:
+![before resize](images/python-logo.png)
+![after resize](images/python-logo-resized.png)
